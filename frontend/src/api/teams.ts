@@ -5,8 +5,9 @@ const API_BASE_URL = 'http://localhost:3000/api';
 export interface Team {
     id: number;
     name: string;
+    owner_id: number;
     created_at : Date;
-    status : number;
+    updated_at : Date;
 }
 
 export const getTeams = async (): Promise<Team[]> => {

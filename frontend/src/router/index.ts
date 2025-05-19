@@ -1,14 +1,38 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import type { RouteRecordRaw } from 'vue-router';
-import UserList from '@/components/UserList.vue';
-import UserCreateForm from '@/components/UserCreateForm.vue';
-import UserEditForm from '@/components/UserEditForm.vue';
-import TeamList from '@/components/TeamList.vue';
-import TeamCreateForm from '@/components/TeamCreateForm.vue';
-import TeamShow from '@/components/TeamShow.vue';
-import TeamEditForm from '@/components/TeamEditForm.vue';
+import Home from '@/pages/Home.vue';
+import UserList from '@/components/user/UserList.vue';
+import UserCreateForm from '@/components/user/UserCreateForm.vue';
+import UserEditForm from '@/components/user/UserEditForm.vue';
+import TeamList from '@/components/team/TeamList.vue';
+import TeamCreateForm from '@/components/team/TeamCreateForm.vue';
+import TeamShow from '@/components/team/TeamShow.vue';
+import TeamEditForm from '@/components/team/TeamEditForm.vue';
+import TaskCreateForm from '@/components/task/TaskCreateForm.vue';
+import About from '@/pages/About.vue';
+import NewTeam from '@/pages/NewTeam.vue';
 
 const routes: RouteRecordRaw[] = [
+    {
+        path: '/',
+        name: 'Home',
+        component: Home,
+    },
+    {
+        path: '/about/:id',
+        name: 'About',
+        component: About,
+    },
+    {
+        path: '/new_team',
+        name: 'NewTeam',
+        component: NewTeam,
+    },
+    {
+        path: '/tasks/new',
+        name: 'TaskCreate',
+        component: TaskCreateForm,
+    },
     {
         path: '/teams',
         name: 'TeamList',

@@ -3,5 +3,4 @@ class Task < ApplicationRecord
     validates :body, presence: true
     validates :status, presence: true
     validates :team_id, presence: true
-    validates :assignee_id, presence: true
 end

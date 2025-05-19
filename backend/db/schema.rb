@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_15_051028) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_16_035310) do
   create_table "members", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -21,6 +21,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_15_051028) do
     t.text "body", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "status", default: 0, null: false
+    t.bigint "team_id", null: false
+    t.integer "assignee_id"
+    t.index ["team_id"], name: "index_tasks_on_team_id"
   end
 
   create_table "teams", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -40,5 +44,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_15_051028) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "tasks", "teams"
   add_foreign_key "teams", "users", column: "owner_id"
 end

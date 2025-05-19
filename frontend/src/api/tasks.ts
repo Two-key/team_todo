@@ -7,8 +7,10 @@ export interface Task {
     title: string;
     body: string;
     status: number;
-    assignee_id: number;
+    assignee_id: number| null;
+    team_id: number;
     created_at : Date;
+    updated_at : Date;
 }
 
 export const getTasks = async (): Promise<Task[]> => {
