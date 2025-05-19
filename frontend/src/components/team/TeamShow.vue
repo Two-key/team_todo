@@ -44,7 +44,6 @@
     if (confirm('本当にこのチームを削除しますか？')) {
       try {
         await deleteTeam(id);
-        await fetchTeam();
         router.push({ name: 'TeamList'})
       } catch (error) {
         console.error('チームの削除に失敗しました:', error);

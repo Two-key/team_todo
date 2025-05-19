@@ -44,7 +44,10 @@
   const submitForm = async () => {
     if (team.value) {
       try {
-        const updatedTeam = await updateTeam(teamId.value, { name: team.value.name});
+        const updatedTeam = await updateTeam(teamId.value, {
+          name: team.value.name,
+          owner_id: 0 //login機能実装後編集
+        });
         console.log('ユーザー情報を更新しました:', updatedTeam);
         router.push({ name: 'TeamList' });
       } catch (error: any) {

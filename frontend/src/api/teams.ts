@@ -10,6 +10,8 @@ export interface Team {
     updated_at : Date;
 }
 
+export type TeamUpdateInput = Omit<Team, 'created_at' | 'updated_at' | 'id'>
+
 export const getTeams = async (): Promise<Team[]> => {
     const response = await axios.get<Team[]>(`${API_BASE_URL}/teams`);
     return response.data;
@@ -25,7 +27,7 @@ export const createTeam = async (teamData: Omit<Team, 'id' | 'created_at' | 'upd
     return response.data;
 };
 
-export const updateTeam = async (id: number, teamData: Omit<Team, 'id'>): Promise<Team> => {
+export const updateTeam = async (id: number, teamData: Omit<Team, 'id'| 'created_at' | 'updated_at'>): Promise<Team> => {
     const response = await axios.put<Team>(`${API_BASE_URL}/teams/${id}`, {team : teamData});
     return response.data;
 };

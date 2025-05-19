@@ -19,16 +19,16 @@ export const getTasks = async (): Promise<Task[]> => {
 };
 
 export const getTask = async (id: number): Promise<Task> => {
-    const response = await axios.get<Task>(`${API_BASE_URL}/teams/${id}`);
+    const response = await axios.get<Task>(`${API_BASE_URL}/tasks/${id}`);
     return response.data;
 };
 
-export const createTask = async (taskData: Omit<Task, 'id' | 'updated_at' | 'created_at' | 'updated_at'>): Promise<Task> => {
+export const createTask = async (taskData: Omit<Task, 'id' | 'updated_at' | 'created_at'>): Promise<Task> => {
     const response = await axios.post<Task>(`${API_BASE_URL}/tasks`, {task : taskData});
     return response.data;
 };
 
-export const updateTask = async (id: number, taskData: Omit<Task, 'id'>): Promise<Task> => {
+export const updateTask = async (id: number, taskData: Omit<Task, 'id'| 'updated_at' | 'created_at'>): Promise<Task> => {
     const response = await axios.put<Task>(`${API_BASE_URL}/tasks/${id}`, {task : taskData});
     return response.data;
 };

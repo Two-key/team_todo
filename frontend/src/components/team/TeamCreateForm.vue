@@ -19,6 +19,7 @@ import { useRouter } from 'vue-router'
 
 const newTeam = ref<Omit<Team, 'id' | 'created_at' | 'updated_at'>>({
     name: '',
+    owner_id: 0
 });
 
 const errorMessage = ref<string | null>(null);
@@ -31,7 +32,7 @@ const submitForm = async () => {
     try {
     const createdTeam = await createTeam(newTeam.value as Omit<Team, 'id' | 'created_at' | 'updated_at'>);
     emit('team-created', createdTeam);
-    newTeam.value = { name: ''};
+    newTeam.value = { name: '', owner_id: 0};
     errorMessage.value = null;
     router.push({ name: 'TeamList'})
     } catch (error: any) {

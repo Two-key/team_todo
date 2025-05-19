@@ -9,6 +9,7 @@ import TeamCreateForm from '@/components/team/TeamCreateForm.vue';
 import TeamShow from '@/components/team/TeamShow.vue';
 import TeamEditForm from '@/components/team/TeamEditForm.vue';
 import TaskCreateForm from '@/components/task/TaskCreateForm.vue';
+import TaskEditForm from '@/components/task/TaskEditForm.vue';
 import About from '@/pages/About.vue';
 import NewTeam from '@/pages/NewTeam.vue';
 
@@ -32,6 +33,12 @@ const routes: RouteRecordRaw[] = [
         path: '/tasks/new',
         name: 'TaskCreate',
         component: TaskCreateForm,
+    },
+    {
+        path: '/tasks/:id/edit',
+        name: 'TaskEdit',
+        component: TaskEditForm,
+        props: true,
     },
     {
         path: '/teams',
