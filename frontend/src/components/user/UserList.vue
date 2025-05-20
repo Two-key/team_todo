@@ -3,7 +3,9 @@
       <h1>ユーザー一覧</h1>
       <ul>
         <li v-for="user in users" :key="user.id">
+          <button @click="loginUser(user.id)">
           {{ user.name }} ({{ user.email }})
+          </button>
           <button @click="editUser(user.id)">編集</button>
           <button @click="deleteUserById(user.id)">削除</button>
         </li>
@@ -25,6 +27,10 @@
     console.log('fetchUsers 実行');
     users.value = await getUsers();
   };
+
+  const loginUser = (id: number) => {
+    router.push({ name: 'Home', params: { id } });
+  }
   
   const editUser = (id: number) => {
     router.push({ name: 'UserEdit', params: { id } });

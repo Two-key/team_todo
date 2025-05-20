@@ -23,7 +23,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { createUser, User } from '@/api/users';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const newUser = ref<Omit<User, 'id' | 'created_at' | 'updated_at'>>({ name: '', email: '', password: '' });
 const errorMessage = ref<string | null>(null);
 
@@ -33,8 +35,9 @@ const submitForm = async () => {
     try {
     const createdUser = await createUser(newUser.value as Omit<User, 'id' | 'created_at' | 'updated_at'>);
     emit('user-created', createdUser);
-      newUser.value = { name: '', email: '', password: '' }; // フォームをリセット
+    newUser.value = { name: '', email: '', password: '' };
     errorMessage.value = null;
+    router.push({ name: 'Home', params: { ownerId: createdUser.id} });
     } catch (error: any) {
     errorMessage.value = 'ユーザーの作成に失敗しました。';
     if (error.response && error.response.data) {

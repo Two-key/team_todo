@@ -55,7 +55,7 @@ const editedTask = ref<Omit<Task, 'id' | 'created_at' | 'updated_at'>>({
     body: '',
     status: 1,
     assignee_id: null,
-    team_id: Number(route.params.team_id)
+    team_id: Number(route.params.teamId)
 });
 
 const fetchUsers = async () => {
@@ -63,7 +63,7 @@ const fetchUsers = async () => {
 };
 
 const fetchTeam = async () => {
-    const id = Number(route.params.id);
+    const id = Number(route.params.teamId);
     team.value = await getTeam(id);
     editedTask.value.team_id = id;
 };

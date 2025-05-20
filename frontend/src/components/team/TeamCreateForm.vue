@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { createTeam, Team } from '@/api/teams';
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 const newTeam = ref<Omit<Team, 'id' | 'created_at' | 'updated_at'>>({
     name: '',
@@ -25,20 +25,26 @@ const newTeam = ref<Omit<Team, 'id' | 'created_at' | 'updated_at'>>({
 const errorMessage = ref<string | null>(null);
 
 const router = useRouter();
+const route = useRoute();
+const ownerId = Number(route.params.ownerId);
+
 
 const emit = defineEmits(['team-created']);
 
 const submitForm = async () => {
     try {
-    const createdTeam = await createTeam(newTeam.value as Omit<Team, 'id' | 'created_at' | 'updated_at'>);
-    emit('team-created', createdTeam);
-    newTeam.value = { name: '', owner_id: 0};
-    errorMessage.value = null;
-    router.push({ name: 'TeamList'})
-    } catch (error: any) {
-    errorMessage.value = 'チームの作成に失敗しました。';
-    if (error.response && error.response.data) {
-        console.error('エラー詳細:', error.response.data);
+        newTeam.value.owner_id = ownerId;
+        
+        const createdTeam = await createTeam(newTeam.value as Omit<Team, 'id' | 'created_at' | 'updated_at'>);
+        emit('team-created', createdTeam);
+
+        newTeam.value = { name: '', owner_id: ownerId};
+        errorMessage.value = null;
+        router.push({ name: 'Home'})
+        } catch (error: any) {
+        errorMessage.value = 'チームの作成に失敗しました。';
+        if (error.response && error.response.data) {
+            console.error('エラー詳細:', error.response.data);
     }
     }
 };

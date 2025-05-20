@@ -4,7 +4,7 @@
       <h1>チーム詳細</h1>
       <ul>
         <li id="name">チーム名:{{ team.name }}</li>
-        <li>オーナーID:{{ team.owner_id }}</li>
+        <li>チームオーナー:{{ getUserNameById(team.owner_id) }}</li>
         <li>作成日時:{{ formatDate(team.created_at) }}</li>
         <li>更新日時:{{ formatDate(team.updated_at) }}</li>
       </ul>
@@ -22,20 +22,31 @@
   import { ref, onMounted } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import { getTeam, deleteTeam, Team } from '@/api/teams';
+  import { getUsers, User } from '@/api/users'
 
   const formatDate = (dateStr: Date): string => {
     return dayjs(dateStr).format('YYYY/MM/DD HH:mm')
   }
   
   const team = ref<Team | null>(null);
+  const users = ref<User[]>([]);
   const route = useRoute();
   const router = useRouter();
+
+  const fetchUsers = async () => {
+  users.value = await getUsers();
+};
   
   const fetchTeam = async () => {
     const id = Number(route.params.id);
     team.value = await getTeam(id);
   };
-  
+
+  const getUserNameById = (id: number): string => {
+  const user = users.value.find(u => u.id === id);
+  return user ? user.name : '未設定';
+};
+
   const editTeam = (id: number) => {
     router.push({ name: 'TeamEdit', params: { id } });
   };
@@ -52,6 +63,9 @@
     }
   };
   
-  onMounted(fetchTeam);
+  onMounted(async () => {
+  await fetchUsers();
+  await fetchTeam();
+});
 </script>
   
