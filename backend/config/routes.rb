@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   namespace :api do
     resources :users
-    post 'login', to: 'authentication#login'
+    post 'authentication/login', to: 'authentication#login'
+    delete 'authentication/logout', to: 'authentication#logout'
+    get 'authentication/check', to: 'authentication#check'
     resources :teams
     resources :tasks
   end

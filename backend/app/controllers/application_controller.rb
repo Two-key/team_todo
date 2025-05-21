@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+  include ActionController::Cookies
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   #allow_browser versions: :modern
 
@@ -14,11 +15,11 @@ class ApplicationController < ActionController::API
   end
 
   def authenticate
-    authorization_header = request.headers[:authorization]
-    if !authorization_header
+    token = cookies.encrypted[:auth_token]
+    
+    if token.nil?
       render_unauthorized
     else
-      token = authorization_header.split(" ")[1]
       secret_key = Rails.application.credentials.secret_key_base
 
       begin
@@ -27,11 +28,19 @@ class ApplicationController < ActionController::API
       rescue ActiveRecord::RecordNotFound
         render_unauthorized
       rescue JWT::ExpiredSignature
+        # Cookieも削除
+        cookies.delete(:auth_token) if cookies[:auth_token].present?
         render json: { errors: 'ExpiredSignature' }, status: :unauthorized
       rescue JWT::DecodeError
+        # Cookieも削除
+        cookies.delete(:auth_token) if cookies[:auth_token].present?
         render_unauthorized
       end
     end
+  end
+
+  def current_user
+    @current_user
   end
 
   def render_unauthorized

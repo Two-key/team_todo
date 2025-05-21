@@ -10,8 +10,10 @@
             <label for="password">パスワード:</label>
             <input type="password" id="password" v-model="signinUser.password" required minlength="6">
         </div>
-        <button type="submit">ログイン</button>
-        <button @click="signUp">新規登録</button>
+        <button type="submit" :disabled="isLoading">
+                {{ isLoading ? 'ログイン中...' : 'ログイン' }}
+        </button>
+        <button type="button" @click="signUp" :disabled="isLoading">新規登録</button>
     </form>
     </div>
 </template>
@@ -25,29 +27,34 @@ import { getUsers, User } from '@/api/users'
 const router = useRouter();
 const signinUser = ref<Omit<User, 'id' | 'name' | 'created_at' | 'updated_at'>>({ email: '', password: '' });
 const errorMessage = ref<string | null>(null);
+const isLoading = ref(false);
 
 const signUp = async () => {
     router.push({ name: 'SignUp'})
 }
 
 const submitForm = async () => {
-try {
-    const res = await login(signinUser.value.email, signinUser.value.password);
-    localStorage.setItem('auth_token', res.user.token);
-
-    const users = await getUsers();
+    errorMessage.value = null;
+    isLoading.value = true;
     
-    const matchedUser = users.find(user => user.email === signinUser.value.email);
-    if (!matchedUser) {
-    throw new Error('該当ユーザーが見つかりません');
-    }
+    try {
+        const res = await login(signinUser.value.email, signinUser.value.password);
+        
+        const users = await getUsers();
+        
+        const matchedUser = users.find(user => user.email === signinUser.value.email);
+        if (!matchedUser) {
+            throw new Error('該当ユーザーが見つかりません');
+        }
 
-    const ownerId = matchedUser.id;
-    console.log('ownerId:', ownerId);
-    router.push({ name: 'Home', params: { ownerId } });
-} catch (error: any) {
-errorMessage.value = 'ログインに失敗しました。';
-console.error('ログインエラー:', error.response?.data || error.message);
-}
+        const ownerId = matchedUser.id;
+        console.log('ownerId:', ownerId);
+        router.push({ name: 'Home', params: { ownerId } });
+    } catch (error: any) {
+        errorMessage.value = 'ログインに失敗しました。メールアドレスまたはパスワードが正しくありません。';
+        console.error('ログインエラー:', error.response?.data || error.message);
+    } finally {
+        isLoading.value = false;
+    }
 };
 </script>

@@ -26,5 +26,19 @@ module Backend
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    # APIモードでもCookieを使用可能にする
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
+    
+    # # CORSの設定（フロントエンドが別ドメインの場合）
+    # config.middleware.insert_before 0, Rack::Cors do
+    #   allow do
+    #     origins 'http://localhost:3001'
+    #     resource '*',
+    #       headers: :any,
+    #       methods: [:get, :post, :put, :patch, :delete, :options, :head],
+    #       credentials: true
+    #   end
+    # end
   end
 end
