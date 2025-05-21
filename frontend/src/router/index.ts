@@ -13,10 +13,16 @@ import TaskEditForm from '@/components/task/TaskEditForm.vue';
 import About from '@/pages/About.vue';
 import NewTeam from '@/pages/NewTeam.vue';
 import SignUp from '@/pages/SignUp.vue';
+import SignIn from '@/pages/SignIn.vue';
 
 const routes: RouteRecordRaw[] = [
     {
         path: '/',
+        name: 'SignIn',
+        component: SignIn,
+    },
+    {
+        path: '/signup',
         name: 'SignUp',
         component: SignUp,
     },
@@ -24,11 +30,13 @@ const routes: RouteRecordRaw[] = [
         path: '/users/:ownerId/teams',
         name: 'Home',
         component: Home,
+        props: true,
     },
     {
-        path: '/about/:id',
+        path: '/teams/:teamId/about',
         name: 'About',
         component: About,
+        props: true,
     },
     {
         path: '/users/:ownerId/new_team',
@@ -36,9 +44,10 @@ const routes: RouteRecordRaw[] = [
         component: NewTeam,
     },
     {
-        path: '/tasks/new',
+        path: '/teams/:teamId/tasks/new',
         name: 'TaskCreate',
         component: TaskCreateForm,
+        props: true,
     },
     {
         path: '/teams/:teamId/tasks/:id/edit',
@@ -55,6 +64,7 @@ const routes: RouteRecordRaw[] = [
         path: '/teams/:id',
         name: 'TeamShow',
         component: TeamShow,
+        props: true,
     },
     {
         path: '/teams/new',

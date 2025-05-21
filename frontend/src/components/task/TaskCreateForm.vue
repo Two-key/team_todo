@@ -38,17 +38,19 @@ import { createTask, Task } from '@/api/tasks';
 import { getUsers, User } from '@/api/users';
 import { useRoute, useRouter } from 'vue-router'
 import { getTeam, Team } from '@/api/teams';
+import { options } from '@/components/task/status'
 
+const route = useRoute();
 const users = ref<User[]>([]);
 const team = ref<Team | null>(null);
-const route = useRoute();
+const teamId = ref<number>(Number(route.params.teamId));
 
 const fetchUsers = async () => {
     users.value = await getUsers();
 };
 
 const fetchTeam = async () => {
-    const id = Number(route.params.id);
+    const id = Number(route.params.teamId);
     team.value = await getTeam(id);
     newTask.value.team_id = id;
 };
@@ -71,14 +73,9 @@ const router = useRouter();
 
 const emit = defineEmits(['task-created']);
 
-interface Status {
-    value: number;
-    text: string;
-}
-
 const submitForm = async () => {
     try {
-        newTask.value.team_id = Number(route.params.id);
+        newTask.value.team_id = Number(route.params.teamId);
         newTask.value.assignee_id = Number(newTask.value.assignee_id);
 
         const taskToCreate = {
@@ -86,7 +83,7 @@ const submitForm = async () => {
             body: newTask.value.body,
             status: Number(newTask.value.status),
             assignee_id: newTask.value.assignee_id,
-            team_id: Number(route.params.id),
+            team_id: Number(route.params.teamId),
         };
 
         const createdTask = await createTask(taskToCreate);
@@ -96,12 +93,12 @@ const submitForm = async () => {
         title: '',
         body: '',
         status: 1,
-        assignee_id: null, // nullを許容
-        team_id: Number(route.params.id),
+        assignee_id: null,
+        team_id: Number(route.params.teamId),
         };
 
         errorMessage.value = null;
-        router.push({ name: 'About'})
+        router.push({ name: 'About', params: { teamId: teamId.value }});
     } catch (error: any) {
         errorMessage.value = 'タスクの作成に失敗しました。';
         if (error.response && error.response.data) {
@@ -119,10 +116,5 @@ const submitForm = async () => {
         }
     }
 };
-const options = ref<Status[]>([
-    { value: 1, text: '未着手' },
-    { value: 2, text: '進行中' },
-    { value: 3, text: '完了' }
-]);
 
 </script>

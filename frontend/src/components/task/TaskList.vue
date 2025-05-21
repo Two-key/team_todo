@@ -22,25 +22,16 @@ import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { getTasks, deleteTask, Task } from '@/api/tasks';
 import { getUsers, User} from '@/api/users';
+import { options } from '@/components/task/status'
+
 import dayjs from 'dayjs';
 
 const route = useRoute();
 const router = useRouter();
-const teamId = Number(route.params.id);
+const teamId = Number(route.params.teamId);
 
 const tasks = ref<Task[]>([]);
 const users = ref<User[]>([]);
-
-interface Status {
-    value: number;
-    text: string;
-}
-
-const options = ref<Status[]>([
-  { value: 1, text: '未着手' },
-  { value: 2, text: '進行中' },
-  { value: 3, text: '完了' }
-]);
 
 const filteredTasks = computed(() =>
   tasks.value.filter(task => task.team_id === teamId)
@@ -48,12 +39,12 @@ const filteredTasks = computed(() =>
 
 const getUserNameById = (id: number | null): string => {
   if (id === null) return '未設定';
-  const user = users.value.find(u => u.id === id);
+  const user = users.value.find(user => user.id === id);
   return user ? user.name : '未設定';
 };
 
 const getStatusText = (value: number): string => {
-  const option = options.value.find(o => o.value === value);
+  const option = options.find(o => o.value === value);
   return option ? option.text : '不明';
 };
 

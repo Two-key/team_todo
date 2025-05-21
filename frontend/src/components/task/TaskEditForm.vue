@@ -42,10 +42,12 @@ import { useRouter, useRoute } from 'vue-router';
 import { getTask, updateTask, Task } from '@/api/tasks';
 import { getUsers, User } from '@/api/users';
 import { getTeam, Team } from '@/api/teams';
+import { options } from '@/components/task/status'
 
 const route = useRoute();
 const router = useRouter();
 const taskId = ref<number>(Number(route.params.id));
+const teamId = ref<number>(Number(route.params.teamId));
 const task = ref<Task | null>(null);
 const errorMessage = ref<string | null>(null);
 const users = ref<User[]>([]);
@@ -90,7 +92,7 @@ const submitForm = async () => {
         const updatedTask = await updateTask(taskId.value, editedTask.value);
         console.log('タスク情報を更新しました:', updatedTask
         );
-        router.push({ name: 'About' });
+        router.push({ name: 'About', params: { teamId: teamId.value }});
     } catch (error: any) {
         errorMessage.value = 'タスク情報の更新に失敗しました。';
         if (error.response && error.response.data) {
@@ -99,17 +101,6 @@ const submitForm = async () => {
     }
     }
 };
-
-interface Status {
-    value: number;
-    text: string;
-}
-
-const options = ref<Status[]>([
-    { value: 1, text: '未着手' },
-    { value: 2, text: '進行中' },
-    { value: 3, text: '完了' }
-]);
 
 const goBack = () => {
     router.go(-1);

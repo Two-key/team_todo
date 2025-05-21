@@ -6,7 +6,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
-    password?: string; // ユーザー作成・更新時に使用
+    password: string;
     created_at?: string;
     updated_at?: string;
 }

@@ -38,8 +38,10 @@
 };
   
   const fetchTeam = async () => {
-    const id = Number(route.params.id);
-    team.value = await getTeam(id);
+    const teamId = Number(route.params.teamId);
+    console.log('取得するチームID:', teamId);
+    team.value = await getTeam(teamId);
+    console.log('取得したチーム:', team.value);
   };
 
   const getUserNameById = (id: number): string => {

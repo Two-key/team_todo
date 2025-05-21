@@ -17,6 +17,7 @@
         <button type="submit">作成</button>
         <div v-if="errorMessage" style="color: red;">{{ errorMessage }}</div>
     </form>
+    <button @click="goBack">戻る</button>
     </div>
 </template>
 
@@ -45,4 +46,8 @@ const submitForm = async () => {
     }
     }
 };
+
+const goBack = () => {
+    router.go(-1);
+    };
 </script>

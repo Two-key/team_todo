@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   namespace :api do
     resources :users
+    post 'login', to: 'authentication#login'
     resources :teams
     resources :tasks
   end
