@@ -4,6 +4,7 @@ module Api
 
         def index
             @tasks = Task.all
+            # @task = Task.where(assignee_id:1) こんな感じで書いていく
             render json: @tasks
         end
 
