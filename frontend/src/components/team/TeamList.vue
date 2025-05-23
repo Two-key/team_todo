@@ -16,13 +16,13 @@
 <script setup lang="ts">
   import { ref,computed, onMounted } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
-  import { getTeams, Team } from '@/api/teams';
+  import { getTeams, Team } from '@/api/teams';// 修正　ログイン中のユーザーIDに紐づくチーム一覧を取得するAPIを呼ぶ　
   
   const route = useRoute();
 
   const teams = ref<Team[]>([]);
   const router = useRouter();
-  const ownerId = Number(route.params.ownerId);
+  const ownerId = Number(route.params.ownerId); //パラメーターのIDではなく、ログイン中のID(ローカルストレージかCookie)から取得するようにする　いらないかも？
 
   const filteredTeams = computed(() =>
   teams.value.filter(team => team.owner_id === ownerId)
@@ -33,7 +33,7 @@
   };
   
   const createTeam = () => {
-    router.push({ name: 'NewTeam', params: { ownerId } });
+    router.push({ name: 'NewTeam', params: { ownerId } });//ここの次のページではオーナーIDは自分なので、パラメーターは必要なし
   };
   
   onMounted(fetchTeams);
